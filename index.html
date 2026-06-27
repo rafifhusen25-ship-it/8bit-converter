@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>8-Bit Converter</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Consolas&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0d1117;
+      --card-color: #161b22;
+      --accent-color: #58a6ff;
+      --accent-hover: #79b6ff;
+      --text-color: #c9d1d9;
+      --error-color: #f85149;
+      --success-color: #3fb950;
+      --success-hover: #56d364;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      gap: 0;
+    }
+
+    .card {
+      background-color: var(--card-color);
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 30px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent-color);
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      font-family: 'Consolas', monospace;
+      background-color: var(--bg-color);
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: var(--text-color);
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--accent-color);
+    }
+
+    .result {
+      font-family: 'Consolas', monospace;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--success-color);
+      min-height: 40px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      letter-spacing: 2px;
+    }
+
+    .error-msg {
+      font-size: 14px;
+      color: var(--error-color);
+      min-height: 20px;
+      margin-bottom: 20px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+      color: #ffffff;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .btn-convert {
+      background-color: var(--accent-color);
+    }
+
+    .btn-convert:hover {
+      background-color: var(--accent-hover);
+    }
+
+    .btn-copy {
+      background-color: var(--success-color);
+    }
+
+    .btn-copy:hover {
+      background-color: var(--success-hover);
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.55;
+      transition: opacity 0.3s;
+    }
+    .footer:hover { opacity: 1; }
+
+    .footer-powered {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-color);
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    .footer-brand svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .footer-logo-img {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      object-fit: cover;
+    }
+
+    .footer-sep {
+      color: #444c56;
+      font-size: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>8-Bit Converter</h1>
+    
+    <div class="input-group">
+      <input type="text" id="userInput" placeholder="Angka atau huruf..." autocomplete="off">
+    </div>
+
+    <div class="result" id="resultLabel"></div>
+    <div class="error-msg" id="errorLabel"></div>
+
+    <div class="btn-group">
+      <button class="btn-convert" onclick="handleConvert()">Convert</button>
+      <button class="btn-copy" onclick="handleCopy()">Copy</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span class="footer-powered">Powered by</span>
+    <div class="footer-brand">
+      <!-- Python official logo SVG (simplified) -->
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11.914 0C5.82 0 6.2 2.656 6.2 2.656l.007 2.752h5.814v.826H3.9S0 5.789 0 11.969c0 6.18 3.403 5.959 3.403 5.959h2.031v-2.867s-.109-3.402 3.345-3.402h5.766s3.236.052 3.236-3.127V3.227S18.28 0 11.914 0zm-3.2 1.862a1.042 1.042 0 1 1 0 2.083 1.042 1.042 0 0 1 0-2.083z" fill="#3776ab"/>
+        <path d="M12.086 24c6.094 0 5.714-2.656 5.714-2.656l-.007-2.752H12v-.826h8.1S24 18.211 24 12.031c0-6.18-3.403-5.959-3.403-5.959h-2.031v2.867s.109 3.402-3.345 3.402H9.455s-3.236-.052-3.236 3.127v5.305S5.72 24 12.086 24zm3.2-1.862a1.042 1.042 0 1 1 0-2.083 1.042 1.042 0 0 1 0 2.083z" fill="#ffd43b"/>
+      </svg>
+      Python
+      <span class="footer-sep">•</span>
+      <img src="logo.png" alt="App Logo" class="footer-logo-img">
+      8-Bit Converter
+      <span class="footer-sep">•</span>
+      Rafif
+      <span class="footer-sep">•</span>
+      Antigravity
+    </div>
+  </footer>
+
+  <script>
+    const userInput = document.getElementById('userInput');
+    const resultLabel = document.getElementById('resultLabel');
+    const errorLabel = document.getElementById('errorLabel');
+
+    // Realtime clear/auto-update
+    userInput.addEventListener('input', () => {
+      const val = userInput.value.trim();
+      if (!val) {
+        resultLabel.textContent = '';
+        errorLabel.textContent = '';
+      }
+    });
+
+    // Handle Enter keypress
+    userInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        handleConvert();
+      }
+    });
+
+    function to8bit(value) {
+      return (value & 0xFF).toString(2).padStart(8, '0');
+    }
+
+    function handleConvert() {
+      const raw = userInput.value.trim();
+      if (!raw) {
+        resultLabel.textContent = '';
+        errorLabel.textContent = '';
+        return;
+      }
+
+      try {
+        let bits = '';
+        // Jika 1 karakter bukan angka -> konversi via kode ASCII
+        if (raw.length === 1 && isNaN(raw)) {
+          bits = to8bit(raw.charCodeAt(0));
+        } else {
+          // Coba parse ke integer desimal
+          const num = parseInt(raw, 10);
+          if (isNaN(num)) {
+            throw new Error("Input harus angka atau satu huruf");
+          }
+          bits = to8bit(num);
+        }
+        resultLabel.textContent = bits;
+        resultLabel.style.color = 'var(--success-color)';
+        errorLabel.textContent = '';
+      } catch (err) {
+        resultLabel.textContent = '';
+        errorLabel.textContent = err.message;
+      }
+    }
+
+    function handleCopy() {
+      const bits = resultLabel.textContent;
+      if (bits) {
+        navigator.clipboard.writeText(bits).then(() => {
+          errorLabel.textContent = 'Copied!';
+          errorLabel.style.color = 'var(--success-color)';
+          setTimeout(() => {
+            if (errorLabel.textContent === 'Copied!') {
+              errorLabel.textContent = '';
+              errorLabel.style.color = 'var(--error-color)';
+            }
+          }, 1500);
+        });
+      } else {
+        errorLabel.textContent = 'Nothing to copy';
+        errorLabel.style.color = 'var(--error-color)';
+      }
+    }
+  </script>
+</body>
+</html>
